@@ -5,6 +5,8 @@
 const defaultResult = 0;
 let currentResult = defaultResult;
 let calculatorDescription = `( ${defaultResult} )`;
+let logEntries = [];
+let logOperators = [];
 
 // Main
 addBtn.addEventListener("click", addOperator);
@@ -36,7 +38,6 @@ function divideOperator() {
 // operator selection based on html-button pressed (index.html vendor.js)
 function operatorSelect(button) {
   operator = button.innerText;
-  console.log(`operator.operatorSelect is ${operator}`);
   calculator(operator);
 }
 
@@ -46,11 +47,24 @@ function getUserInputValue() {
   return number;
 }
 
+function logHistory(operatorWord, initialResult, operator, num, currentResult) {
+  const logEntry = {
+    logOperatorWord: operatorWord,
+    logInitialResult: initialResult,
+    logOperator: operator,
+    logNumber: num,
+    logNewResult: currentResult,
+  };
+  logEntries.push(logEntry);
+  console.log(logEntries);
+}
+
 // calculations router
 function calculator(operator) {
   const num = getUserInputValue();
   calculation(operator, currentResult, num);
   outputResult(currentResult, calculatorDescription);
+  logHistory(operatorWord, initialResult, operator, num, currentResult);
 }
 
 // preform calculation based on userinputvalue and operator
@@ -59,19 +73,27 @@ function calculation(opr, val1, val2) {
 
   switch (opr) {
     case "+":
+      initialResult = currentResult;
       currentResult = val1 + val2;
+      operatorWord = "ADD";
       break;
     case "-":
+      initialResult = currentResult;
       currentResult = val1 - val2;
+      operatorWord = "SUBSTRACT";
       break;
     case "*":
+      initialResult = currentResult;
       currentResult = val1 * val2;
+      operatorWord = "MULTIPLY";
       break;
     case "/":
+      initialResult = currentResult;
       currentResult = val1 / val2;
+      operatorWord = "DIVIDE";
       break;
     default:
-      console.log("selection failed");
+      console.log("ERROR: selection failed");
   }
 
   return currentResult, calculatorDescription;
